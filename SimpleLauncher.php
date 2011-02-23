@@ -18,13 +18,18 @@ class SimpleLauncher {
 	 *
 	 * @return array $this->_config
 	 */
-	public function getConfig(array $params, array $argv) {
+	public function getConfig(array $params, array $argv, $noDuplication = false) {
 		// отпарсить строку правил
 		foreach($params as $k => $v) {
 			$keys = explode('|', $k);
 			$this->_config[$keys[0]] = ($v) ? $v : '';
-			if (array_key_exists(1,$keys))
+			if (array_key_exists(1, $keys)) {
 				$this->_config[$keys[1]] = &$this->_config[$keys[0]];
+
+				if ($noDuplication) {
+					unset($this->_config[$keys[0]]);
+				}
+			}
 		}
 
 		// сопоставить с консольным вводом
